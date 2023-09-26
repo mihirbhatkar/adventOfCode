@@ -1,4 +1,3 @@
-const { log } = require("console");
 const fs = require("fs");
 
 let data = "";
@@ -11,7 +10,6 @@ try {
 
 function calculateCharacterScore(char) {
 	const charAscii = char.charCodeAt(0);
-
 	if (charAscii > 90) {
 		return charAscii - 96;
 	} else if (charAscii >= 65) {
@@ -36,48 +34,28 @@ for (let i = 0; i < array.length; i++) {
 		}
 	}
 }
-
 console.log("First star:", score);
 
-function removeCharacter(str, position) {
-	let newString =
-		str.substring(0, position - 1) + str.substring(position, str.length);
-	return newString;
-}
-
 const n = 3;
+let secondStarScore = 0;
 for (let i = 0; i < array.length; i += n) {
-	// const arr = [];
-	// for(let j=0; j<n; j++) arr.push(array[j]);
-
-	const map = {};
-	let firstStr = array[i];
-	// for (let j = 0; j < array[i].length; j++) {
-	// 	if (map[firstStr[j]]) {
-	// 		map[firstStr[j]]++;
-	// 	} else {
-	// 		map[firstStr[j]] = 1;
-	// 	}
-	// }
+	let first = array[i];
 
 	for (let j = i + 1; j < i + n; j++) {
-		for (let char of array[j]) {
-			if (firstStr.indexOf(char) !== -1) {
-				const indexes = [];
-				for (let index = 0; index < firstStr.length; index++) {
-					if (firstStr[index] === char) {
-						indexes.push(index);
-					}
-				}
-
-				for (let index in indexes) {
-					firstStr = removeCharacter(firstStr, index);
-				}
+		for (const c of first) {
+			const idx = array[j].indexOf(c);
+			if (idx === -1) {
+				const idxToRemove = first.indexOf(c);
+				first =
+					first.slice(0, idxToRemove) + first.slice(idxToRemove + 1); // removing the character which is not common
 			}
 		}
 	}
-	console.log(firstStr);
+
+	secondStarScore += calculateCharacterScore(first[0]);
 }
+
+console.log("Second Star:", secondStarScore);
 
 // ASCII
 // 97 a -> 122 z
